@@ -10,6 +10,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import VerifyOTP from "./pages/verifyOtp";
 import Addfood from "./pages/admin/Addfood";
 import Menu from "./pages/Menu";
+import FoodPage from "./pages/FoodPage";
 function App() {
   return (
     <>
@@ -47,6 +48,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Menu />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/menu/:id"
+          element={
+            <ProtectedRoute>
+              <FoodPage />
             </ProtectedRoute>
           }
         />
