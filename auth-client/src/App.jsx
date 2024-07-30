@@ -5,13 +5,23 @@ import Navbar from "./Shared/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 import ProtectedRoute from "./pages/ProtectedRoute";
 import VerifyOTP from "./pages/verifyOtp";
 import Addfood from "./pages/admin/Addfood";
 import Menu from "./pages/Menu";
 import FoodPage from "./pages/FoodPage";
+import Profile from "./pages/Profile";
+import ViewCard from "./pages/ViewCard";
+import Success from "./pages/Success";
+import Cancel from "./pages/Cancel";
+import Order from "./pages/Order";
 function App() {
+  const stripePromise = loadStripe(
+    "pk_test_51PhpQGFLyQ0kKP5rhvRQJVPqsYYji1eeGfvDFzp2CbtdoLhn4NuELmWkKQhVHeNLzoSPFnQuKVzmyA8xGVvXzuNd00FQpkGDpi"
+  );
   return (
     <>
       <Navbar />
@@ -34,7 +44,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/addfood"
           element={
@@ -52,10 +61,52 @@ function App() {
           }
         />
         <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/menu/:id"
           element={
             <ProtectedRoute>
               <FoodPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/viewcard"
+          element={
+            <ProtectedRoute>
+              <ViewCard />
+            </ProtectedRoute>
+          }
+        />{" "}
+        <Route
+          path="/success"
+          element={
+            <ProtectedRoute>
+              <Success />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cancel"
+          element={
+            <ProtectedRoute>
+              <Cancel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order"
+          element={
+            <ProtectedRoute>
+              <Elements stripe={stripePromise}>
+                <Order />
+              </Elements>
             </ProtectedRoute>
           }
         />

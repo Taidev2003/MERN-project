@@ -194,10 +194,51 @@ const verifyOtpController = async (req, res) => {
     });
   }
 };
+const updateUserProfile = async (req, res) => {
+  try {
+    const {
+      name,
+      profileImage,
+      userId,
+      street,
+      state,
+      city,
+      zipcode,
+      country,
+    } = req.body;
 
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    user.name = name || user.name;
+    user.profileImage = profileImage || user.profileImage;
+    user.street = street || user.street;
+    user.state = state || user.state;
+    user.city = city || user.city;
+    user.zipcode = zipcode || user.zipcode;
+    user.country = country || user.country;
+    await user.save();
+    return res.status(200).send({
+      message: "Profile update successful",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: "User error",
+      success: false,
+    });
+  }
+};
 module.exports = {
   registerController,
   authController,
   loginController,
   verifyOtpController,
+  updateUserProfile,
 };

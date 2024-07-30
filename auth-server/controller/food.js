@@ -75,6 +75,53 @@ const getNewFood = async (req, res) => {
     });
   }
 };
+const getProductsFromDistinctCatagory = async (req, res) => {
+  try {
+    const distinctCatagory = await Food.distinct("category"); // lấy danh sách các trường duy  nhất bằng dítinct
+    const distinctfood = await Promise.all(
+      distinctCatagory.slice(0, 4).map(async (category) => {
+        const food = await Food.findOne({ category });
+        return food;
+      })
+    );
+
+    res.status(200).send({
+      message: "4 different category food",
+      success: true,
+      data: {
+        food: distinctfood,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+const getTopRating = async (req, res) => {
+  try {
+    const topRateFoods = await Food.find()
+      .sort({ "reviews.rating": -1 })
+      .limit(4);
+
+    res.status(200).send({
+      message: "Foods Top Rating",
+      success: true,
+      data: {
+        food: topRateFoods,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "Internal Server Error",
+      success: false,
+    });
+  }
+};
 
 const getFoodById = async (req, res) => {
   try {
@@ -98,4 +145,11 @@ const getFoodById = async (req, res) => {
   }
 };
 
-module.exports = { createFood, getAllFood, getFoodById, getNewFood };
+module.exports = {
+  createFood,
+  getAllFood,
+  getFoodById,
+  getNewFood,
+  getProductsFromDistinctCatagory,
+  getTopRating,
+};

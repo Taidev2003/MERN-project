@@ -27,7 +27,9 @@ const Login = () => {
           localStorage.setItem("token", data.data.token);
           toast.success(data.message);
           from.reset();
-          navigate("/");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         } else {
           toast.error(data.message);
         }

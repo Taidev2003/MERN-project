@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaHeart, FaStar } from "react-icons/fa";
+
 import { useFoodContext } from "../../context/foodContext";
 import Food from "./Food";
 

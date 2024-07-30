@@ -5,13 +5,16 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { UserProvider } from "../context/userContext.jsx";
 import { FoodProvider } from "../context/foodContext.jsx";
+import { CardProvider } from "../context/cardContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <UserProvider>
         <FoodProvider>
-          <App />
+          <CardProvider>
+            <App />
+          </CardProvider>
         </FoodProvider>
       </UserProvider>
     </BrowserRouter>

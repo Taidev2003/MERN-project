@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFoodContext } from "../../context/foodContext";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import { useCardContext } from "../../context/cardContext";
 
 const Menu = () => {
   const { food, setFood } = useFoodContext();
@@ -74,7 +75,7 @@ const Menu = () => {
     getFoods();
   }, [value]);
 
-  console.log(food); // Kiểm tra dữ liệu food được lấy ra từ API
+  const { addToCard } = useCardContext();
 
   return (
     <div className="pt-[16vh]">
@@ -134,8 +135,11 @@ const Menu = () => {
                     </span>
                   </div>
                 </div>
-                <button className="bg-[#f54748] active:scale-90 transition duration-150 transform hover:shadow-xl shadow-md rounded-full px-8 py-2 text-xl font-mediumm text-white ">
-                  Order Now
+                <button
+                  onClick={() => addToCard(curElem)}
+                  className="bg-[#f54748] active:scale-90 transition duration-150 transform hover:shadow-xl shadow-md rounded-full px-8 py-2 text-xl font-mediumm text-white "
+                >
+                  Add To Card
                 </button>
               </div>
             ))}

@@ -4,6 +4,7 @@ import { TiThMenu } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
+import { useCardContext } from "../../context/cardContext";
 const Navbar = () => {
   const navigate = useNavigate();
   const [nav, setNav] = useState(false);
@@ -13,7 +14,7 @@ const Navbar = () => {
   const handleNav = () => {
     setNav(!nav);
   };
-
+  const { cardItems } = useCardContext();
   return (
     <div className="bg-white/80 shadow-md fixed top-0 left-0 w-full z-40 ease-in duration-300 backdrop-blur-md">
       {user?.user.isVerified === false && (
@@ -62,6 +63,53 @@ const Navbar = () => {
             >
               Popular food
             </a>
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle"
+              >
+                <div className="indicator">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  <span className="badge badge-sm text-red-500 indicator-item">
+                    {cardItems?.length || 0}
+                  </span>
+                </div>
+              </div>
+              <div
+                tabIndex={0}
+                className="card card-compact dropdown-content bg-red-100 z-[1] mt-3 w-52 shadow"
+              >
+                <div className="card-body">
+                  <span className="text-lg font-bold">
+                    {cardItems?.length || 0} items
+                  </span>
+                  <div className="card-actions">
+                    <Link to="/viewcard">
+                      <button
+                        type="submit"
+                        className="bg-[#f54748] active:scale-90 transition duration-150 transform hover:shadow-xl shadow-md w-full rounded-full px-8 py-2 text-xl font-medium text-white mx-auto text-center mb-3 mt-5"
+                      >
+                        View Card
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {user ? (
               <div className="dropdown dropdown-end">
@@ -79,7 +127,9 @@ const Navbar = () => {
                   className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
                 >
                   <li>
-                    <a className="justify-between">Profile</a>
+                    <Link to="/profile" className="justify-between">
+                      Profile
+                    </Link>
                   </li>
                   <li>
                     <a>Settings</a>
