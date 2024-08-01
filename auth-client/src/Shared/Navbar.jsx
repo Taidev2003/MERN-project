@@ -36,12 +36,12 @@ const Navbar = () => {
             >
               Today Special
             </a>
-            <a
-              href="#"
+            <Link
+              to="/my-order"
               className="text-[#191919] text-xl font-medium hover:text-red-500 "
             >
-              Why Foodhunt
-            </a>
+              My Orders
+            </Link>
             <Link
               to="/menu"
               className="text-[#191919] text-xl font-medium hover:text-red-500 "
@@ -129,6 +129,18 @@ const Navbar = () => {
                   <li>
                     <Link to="/profile" className="justify-between">
                       Profile
+                    </Link>
+                  </li>
+                  {user?.user?.role === "admin" && (
+                    <li>
+                      <Link to="/all-order" className="justify-between">
+                        All Order
+                      </Link>
+                    </li>
+                  )}
+                  <li>
+                    <Link to="/my-order" className="justify-between">
+                      My Order
                     </Link>
                   </li>
                   <li>

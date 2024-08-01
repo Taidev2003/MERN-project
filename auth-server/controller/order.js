@@ -1,11 +1,28 @@
 const Order = require("../model/Order");
 
 const stripe = require("stripe")(
-  "pk_test_51PhpQGFLyQ0kKP5rhvRQJVPqsYYji1eeGfvDFzp2CbtdoLhn4NuELmWkKQhVHeNLzoSPFnQuKVzmyA8xGVvXzuNd00FQpkGDpi"
+  "sk_test_51PhpQGFLyQ0kKP5rCVn8EJRtWpeYtJHapbKS3dbHxyt3A8MlJWb81TuXmcvW6Yh9g3QKAM8zs4UqW55IN8vAJKmy00LTRjOC7U"
 );
 const createOrder = async (req, res) => {
   try {
-    const { user, items, totalAmount } = req.body;
+    // Sử dụng đúng tên trường 'totalAmout' từ req.body
+    const { user, items, totalAmout } = req.body;
+
+    console.log("Received data:", req.body);
+
+    // Kiểm tra giá trị totalAmout
+    if (
+      typeof totalAmout !== "number" ||
+      isNaN(totalAmout) ||
+      totalAmout <= 0
+    ) {
+      console.log("Invalid totalAmount:", totalAmout);
+      return res.status(400).json({
+        success: false,
+        message: "Invalid total amount",
+      });
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -15,7 +32,7 @@ const createOrder = async (req, res) => {
             product_data: {
               name: "paid for food",
             },
-            unit_amount: totalAmount * 100,
+            unit_amount: Math.round(totalAmout * 100), // Đảm bảo là số nguyên
           },
           quantity: 1,
         },
@@ -24,11 +41,14 @@ const createOrder = async (req, res) => {
       success_url: "http://localhost:5173/success",
       cancel_url: "http://localhost:5173/cancel",
     });
+
+    console.log("Stripe session created:", session.id);
+
     if (session.id) {
       const newOrder = new Order({
         user,
         items,
-        totalAmount,
+        totalAmount: totalAmout, // Sử dụng đúng tên trường
       });
       const saveOrder = await newOrder.save();
       await Order.findByIdAndUpdate(saveOrder._id, {
@@ -48,13 +68,14 @@ const createOrder = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log("Error creating order:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
     });
   }
 };
+
 const markOrderAsDelivered = async (req, res) => {
   try {
     const { orderId } = req.body;
@@ -79,7 +100,7 @@ const markOrderAsDelivered = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("Items.food").populate("user");
+    const orders = await Order.find().populate("items.food").populate("user");
 
     res.status(200).json({
       success: true,
@@ -97,9 +118,9 @@ const getSingleOrder = async (req, res) => {
   try {
     const { userId } = req.body;
     const userOrders = await Order.find({
-      user: userID,
+      user: userId,
     })
-      .populate("Items.food")
+      .populate("items.food")
       .populate("user");
 
     res.status(200).json({

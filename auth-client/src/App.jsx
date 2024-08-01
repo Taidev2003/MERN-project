@@ -11,6 +11,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import VerifyOTP from "./pages/verifyOtp";
 import Addfood from "./pages/admin/Addfood";
+import AllOrder from "./pages/admin/AllOrder";
+
 import Menu from "./pages/Menu";
 import FoodPage from "./pages/FoodPage";
 import Profile from "./pages/Profile";
@@ -18,6 +20,7 @@ import ViewCard from "./pages/ViewCard";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 import Order from "./pages/Order";
+import MyOrder from "./pages/MyOrder";
 function App() {
   const stripePromise = loadStripe(
     "pk_test_51PhpQGFLyQ0kKP5rhvRQJVPqsYYji1eeGfvDFzp2CbtdoLhn4NuELmWkKQhVHeNLzoSPFnQuKVzmyA8xGVvXzuNd00FQpkGDpi"
@@ -97,6 +100,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Cancel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-order"
+          element={
+            <ProtectedRoute>
+              <MyOrder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/all-order"
+          element={
+            <ProtectedRoute>
+              <AllOrder />
             </ProtectedRoute>
           }
         />

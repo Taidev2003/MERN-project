@@ -11,7 +11,7 @@ const AllOrder = () => {
   const getAllOrders = async () => {
     try {
       const res = await axios.post(
-        `http:localhost:8000/api/v1/ordeer/getorders`,
+        `http://localhost:8000/api/v1/order/getorders`,
         {
           userId: user?.user._id,
           token: localStorage.getItem("token"),
@@ -48,7 +48,7 @@ const AllOrder = () => {
                 Payment
               </h3>
               <h3 className="font-semibold text-center text-gray-900 text-xs uppercase w-1/5">
-                Total Price
+                Status
               </h3>
               <h3 className="font-semibold text-center text-gray-900 text-xs uppercase w-1/5">
                 Total Price
@@ -106,10 +106,10 @@ const OrderFoods = ({ order }) => {
           {order?.items?.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col justify-between ml-4 flex-grows"
+              className="flex flex-col justify-between ml-4 flex-grow"
             >
               <div>
-                <img className="h-20" src={item?.food.foodImage} />
+                <img className="h-20" src={item?.food?.foodImage} />
               </div>
               <span className="font-bold text-sm">{item?.food?.name}</span>
               <span className="flex items-center space-x-4">
@@ -121,34 +121,39 @@ const OrderFoods = ({ order }) => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center w-1/5 cursor-pointer">
-          {order?.payment === false && (
-            <span className="font-bold text-sm">Not paid</span>
-          )}
-          {order?.payment === false && (
-            <span className="font-bold text-green-600 text-sm">Paid</span>
-          )}
-        </div>
-        <div className="flex justify-center w-1/5 cursor-pointer">
-          <span className="font-bold text-sm">{order?.status}</span>
-        </div>
-        <div className="flex justify-center w-1/5 cursor-pointer">
-          <button
-            type="submit"
-            className="bg-[#f54748] active:scale-90 transition duration-150 transform hover:shadow-xl shadow-md w-full rounded-full px-8 py-2 text-xl font-medium text-white mx-auto text-center   "
-            onClick={() => hanldeDeliverred(order?._id)}
-          >
-            Delivered
-          </button>
-        </div>
-        <span className="text-center w-1/5 font-semibold text-sm">
-          {order?.createAt}
-        </span>{" "}
-        <span className="text-center w-1/5 font-semibold text-sm">
-          {order?.TotalAmount}
-        </span>
-        <ToastContainer />
       </div>
+      <div className="flex justify-center w-1/5 cursor-pointer">
+        {order?.payment === false && (
+          <span className="font-bold text-sm">Not paid</span>
+        )}
+        {order?.payment && (
+          <span className="font-bold text-green-600 text-sm">Paid</span>
+        )}
+      </div>
+
+      <div className="flex justify-center w-1/5 cursor-pointer">
+        <span className="font-bold text-sm">{order?.status}</span>
+      </div>
+
+      <div className="flex justify-center w-1/5 cursor-pointer">
+        <button
+          type="submit"
+          className="bg-[#f54748] active:scale-90 transition duration-150 transform hover:shadow-xl shadow-md w-full rounded-full px-8 py-2 text-xl font-medium text-white mx-auto text-center   "
+          onClick={() => hanldeDeliverred(order?._id)}
+        >
+          Delivered
+        </button>
+      </div>
+
+      <span className="text-center w-1/5 font-semibold text-sm">
+        {order?.createAt}
+      </span>
+
+      <span className="text-center w-1/5 font-semibold text-sm">
+        {order?.totalAmount}
+      </span>
+
+      <ToastContainer />
     </div>
   );
 };
